@@ -2,42 +2,41 @@ import { Request, Response } from "express";
 import { SettingsService } from "../services/SettingsService";
 
 class SettingsController {
+  async create(request: Request, response: Response) {
+    const { chat, username } = request.body;
 
-    async create(req: Request, res: Response) {
-        const { chat, username } = req.body;
+    const settingsService = new SettingsService();
 
-        const settingsService = new SettingsService();
-        try {
-            const settings = await settingsService.create({ chat, username });
+    try {
+      const settings = await settingsService.create({ chat, username });
 
-            return res.json(settings);
-        } catch (err) {
-            return res.status(400).json({
-                message: err.message
-            });
-        }
+      return response.json(settings);
+    } catch (err) {
+      return response.status(400).json({
+        message: err.message,
+      });
     }
+  }
 
-    async findByUsername(req: Request, res: Response) {
-        const { username } = req.params;
+  async findByUsername(request: Request, response: Response) {
+    const { username } = request.params;
 
-        const settingsService = new SettingsService();
+    const settingsService = new SettingsService();
 
-        const settings = await settingsService.findByUsername(username);
+    const settings = await settingsService.findByUsername(username);
 
-        return res.json(settings);
-    }
+    return response.json(settings);
+  }
 
-    async update(req: Request, res: Response) {
-        const { username } = req.params;
-        const { chat } = req.body;
+  async update(request: Request, response: Response) {
+    const { username } = request.params;
+    const { chat } = request.body;
 
-        const settingsService = new SettingsService();
+    const settingsService = new SettingsService();
 
-        const settings = await settingsService.update(username, chat);
-
-        return res.json(settings);
-    }
+    const settings = await settingsService.update(username, chat);
+    return response.json(settings);
+  }
 }
 
 export { SettingsController };
